@@ -17,7 +17,7 @@ const driveAnimation = ({ Colors }) => {
 
   const skewXTranslateValue = Text_Drive.map(() => useSharedValue(0));
 
-  const motionValue = useSharedValue(15);
+  const viewMotionValue = useSharedValue(15);
 
   const Action = () => {
     for (let i = 0; i < Text_Drive.length; i++) {
@@ -40,7 +40,7 @@ const driveAnimation = ({ Colors }) => {
       skewXTranslateValue[i].value = withDelay(
         i * 25,
         withRepeat(
-          withTiming(30, { duration: 1200 }, () => {
+          withTiming(30, { duration: 1100 }, () => {
             skewXTranslateValue[i].value = withTiming(0, { duration: 500 });
           }),
           -1,
@@ -48,11 +48,11 @@ const driveAnimation = ({ Colors }) => {
         )
       );
     }
-    motionValue.value = withDelay(
+    viewMotionValue.value = withDelay(
       300,
       withRepeat(
         withTiming(260, { duration: 950 }, () => {
-          motionValue.value = 15;
+          viewMotionValue.value = 15;
         }),
         -1,
         true
@@ -61,8 +61,8 @@ const driveAnimation = ({ Colors }) => {
   };
   const motionStyle = useAnimatedStyle(() => {
     return {
-      left: motionValue.value,
-      opacity: motionValue.value != 15 ? 1 : 0,
+      left: viewMotionValue.value,
+      opacity: viewMotionValue.value != 15 ? 1 : 0,
     };
   });
   const textTranslateStyle = Text_Drive.map((t, i) =>

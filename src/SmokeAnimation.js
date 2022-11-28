@@ -21,18 +21,18 @@ const smokeAnimation = ({ Colors }) => {
 
   const yAxisTranslateValue = Text_Smoke.map(() => useSharedValue(0));
 
-  const [first, setfirst] = useState(0);
+  const [blur, setBlur] = useState(0);
 
   const Action = () => {
-    runOnJS(setfirst)(8);
+    runOnJS(setBlur)(10);
     for (let i = 0; i < Text_Smoke.length; i++) {
       xAxisTranslateValue[i].value = withDelay(
-        i * 20,
+        i * 15,
         withRepeat(
-          withTiming(180, { duration: 1200 }, () => {
+          withTiming(190, { duration: 1300 }, () => {
             xAxisTranslateValue[i].value = -20;
             xAxisTranslateValue[i].value = withTiming(0);
-            runOnJS(setfirst)(0);
+            runOnJS(setBlur)(0);
           }),
           -1,
           true
@@ -43,7 +43,7 @@ const smokeAnimation = ({ Colors }) => {
       yAxisTranslateValue[i].value = withDelay(
         i * 60,
         withRepeat(
-          withTiming(-60, { duration: 1000 }, () => {
+          withTiming(-100, { duration: 1200 }, () => {
             yAxisTranslateValue[i].value = 0;
           }),
           -1,
@@ -90,7 +90,7 @@ const smokeAnimation = ({ Colors }) => {
           </Animated.Text>
         ))}
       </View>
-      <BlurView intensity={first} style={[styles.blur]} />
+      <BlurView intensity={blur} tint="dark" style={[styles.blur]} />
     </Pressable>
   );
 };
@@ -111,10 +111,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   blur: {
+    overflow: "hidden",
     position: "absolute",
     width: width / 2,
-    height: height / 14,
-    borderRadius: 50,
+    height: height / 13,
+    borderRadius: 100,
     marginVertical: 20,
   },
 });
