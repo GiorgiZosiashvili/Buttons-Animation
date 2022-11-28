@@ -105,7 +105,7 @@ const driveAnimation = ({ Colors }) => {
         ],
         opacity: interpolate(
           xAxisTranslateValue[i].value,
-          [-45, 0, 45],
+          [-35, 0, 35],
           [0.1, 1, 0]
         ),
       };
@@ -121,7 +121,7 @@ const driveAnimation = ({ Colors }) => {
         { backgroundColor: Colors.white, shadowColor: Colors.white },
       ]}
     >
-      <Animated.View style={styles.SmokeCont}>
+      <Animated.View style={styles.driveCont}>
         {Text_Drive.map((text, i) => (
           <Animated.Text
             key={i}
@@ -140,8 +140,10 @@ export default driveAnimation;
 
 const styles = StyleSheet.create({
   pressable: {
-    width: width / 2.1,
-    height: height / 12,
+    width: width / 2.5,
+    height: height / 15,
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 50,
     shadowOffset: {
       width: 8,
@@ -150,26 +152,26 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 20,
   },
-  SmokeCont: {
+  driveCont: {
     flexDirection: "row",
-    width: width / 2.1,
-    height: height / 12,
+    width: width / 2.5,
+    height: height / 15,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 500,
+    borderRadius: 50,
     overflow: "hidden",
   },
   fakeView: {
     backgroundColor: "white",
     transform: [{ skewX: "45deg" }],
-    width: 30,
+    width: 25,
     height: height / 23,
     position: "absolute",
     left: 0,
   },
   text: {
     zIndex: -1,
-    fontSize: width / 13,
+    fontSize: width / 18,
     fontWeight: "500",
     margin: 0.5,
   },

@@ -131,8 +131,8 @@ export default smokeAnimation;
 
 const styles = StyleSheet.create({
   pressable: {
-    width: width / 2.1,
-    height: height / 12,
+    width: width / 2.5,
+    height: height / 15,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
@@ -146,23 +146,22 @@ const styles = StyleSheet.create({
   },
   SmokeCont: {
     flexDirection: "row",
-    width: width / 2.1,
-    height: height / 12,
+    width: width / 2.5,
+    height: height / 15,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 500,
+    borderRadius: 50,
     overflow: "hidden",
   },
   blur: {
     position: "absolute",
-    borderRadius: 50,
-    width: width / 2.2,
-    height: height / 13,
-    marginVertical: 20,
+    borderRadius: 100,
+    width: width / 2,
+    height: height / 10,
   },
   text: {
     zIndex: -1,
-    fontSize: width / 13,
+    fontSize: width / 18,
     fontWeight: "500",
     margin: 0.5,
   },

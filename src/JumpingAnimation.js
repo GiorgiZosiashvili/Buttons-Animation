@@ -95,8 +95,8 @@ export default jumpingAnimation;
 
 const styles = StyleSheet.create({
   pressable: {
-    width: width / 2.1,
-    height: height / 12,
+    width: width / 2.5,
+    height: height / 15,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   text: {
     zIndex: -1,
-    fontSize: width / 13,
+    fontSize: width / 18,
     fontWeight: "500",
     margin: 0.5,
   },
