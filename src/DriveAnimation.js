@@ -78,7 +78,7 @@ const driveAnimation = ({ Colors }) => {
   const pressableAnimatedStyle = useAnimatedStyle(() => {
     return {
       shadowOpacity:
-        pressableTranslateValue.value != 0 ? withTiming(0.5) : withTiming(0.2),
+        pressableTranslateValue.value != 0 ? withTiming(0.5) : withTiming(0.1),
       transform: [
         {
           translateY: pressableTranslateValue.value,
