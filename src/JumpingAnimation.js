@@ -7,22 +7,23 @@ import Animated, {
   useSharedValue,
   withDelay,
   withTiming,
+  withRepeat,
 } from "react-native-reanimated";
 
 const Text_Jumping = ["J", "u", "m", "p", "i", "n", "g"];
 
 const { height, width } = Dimensions.get("screen");
 
+const AnimatedButton = Animated.createAnimatedComponent(Pressable);
+
 const jumpingAnimation = ({ Colors }) => {
   const yAxisTranslateValue = Text_Jumping.map(() => useSharedValue(0));
+
+  const pressableTranslateValue = useSharedValue(0);
 
   const textTranslateStyle = Text_Jumping.map((text, i) =>
     useAnimatedStyle(() => {
       return {
-        fontSize: width / 13,
-        color: Colors.white,
-        fontWeight: "500",
-        margin: 0.5,
         transform: [
           {
             translateY: yAxisTranslateValue[i].value,
@@ -32,7 +33,27 @@ const jumpingAnimation = ({ Colors }) => {
     })
   );
 
+  const pressableAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      shadowOpacity:
+        pressableTranslateValue.value != 0 ? withTiming(0.5) : withTiming(0.2),
+      transform: [
+        {
+          translateY: pressableTranslateValue.value,
+        },
+      ],
+    };
+  });
+
   const Action = () => {
+    pressableTranslateValue.value = withRepeat(
+      withTiming(-5, { duration: 300 }, () => {
+        pressableTranslateValue.value = withTiming(0, { duration: 300 });
+      }),
+      -1,
+      true
+    );
+
     for (let i = 0; i < Text_Jumping.length; i++) {
       yAxisTranslateValue[i].value = withDelay(
         i * 70,
@@ -42,19 +63,31 @@ const jumpingAnimation = ({ Colors }) => {
       );
     }
   };
+
   return (
-    <Pressable
+    <AnimatedButton
       onPress={Action}
-      style={[styles.pressable, { backgroundColor: Colors.sky }]}
+      style={[
+        styles.pressable,
+        pressableAnimatedStyle,
+        { backgroundColor: Colors.sky, shadowColor: Colors.sky },
+      ]}
     >
       <Animated.View style={styles.JumpingCont}>
         {Text_Jumping.map((text, i) => (
-          <Animated.Text key={i} style={textTranslateStyle[i]}>
+          <Animated.Text
+            key={i}
+            style={[
+              styles.text,
+              { color: Colors.white },
+              textTranslateStyle[i],
+            ]}
+          >
             {text}
           </Animated.Text>
         ))}
       </Animated.View>
-    </Pressable>
+    </AnimatedButton>
   );
 };
 
@@ -62,12 +95,23 @@ export default jumpingAnimation;
 
 const styles = StyleSheet.create({
   pressable: {
-    width: width / 1.9,
+    width: width / 2.1,
     height: height / 12,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
-    marginVertical: 20,
+    shadowOffset: {
+      width: 8,
+      height: 8,
+    },
+    shadowRadius: 5,
+    elevation: 20,
+  },
+  text: {
+    zIndex: -1,
+    fontSize: width / 13,
+    fontWeight: "500",
+    margin: 0.5,
   },
   JumpingCont: {
     flexDirection: "row",

@@ -8,18 +8,31 @@ import Animated, {
   withRepeat,
   withTiming,
 } from "react-native-reanimated";
+
 const { height, width } = Dimensions.get("screen");
 
-const Text_Drive = ["", "D", "r", "i", "v", "e"];
+const AnimatedButton = Animated.createAnimatedComponent(Pressable);
+
+const Text_Drive = ["D", "r", "i", "v", "e"];
 
 const driveAnimation = ({ Colors }) => {
   const xAxisTranslateValue = Text_Drive.map(() => useSharedValue(0));
 
   const skewXTranslateValue = Text_Drive.map(() => useSharedValue(0));
 
-  const viewMotionValue = useSharedValue(15);
+  const viewMotionValue = useSharedValue(20);
+
+  const pressableTranslateValue = useSharedValue(0);
 
   const Action = () => {
+    pressableTranslateValue.value = withRepeat(
+      withTiming(-5, { duration: 300 }, () => {
+        pressableTranslateValue.value = withTiming(0, { duration: 300 });
+      }),
+      -1,
+      true
+    );
+
     for (let i = 0; i < Text_Drive.length; i++) {
       xAxisTranslateValue[i].value = withDelay(
         i * 10,
@@ -36,11 +49,12 @@ const driveAnimation = ({ Colors }) => {
         )
       );
     }
+
     for (let i = 0; i < Text_Drive.length; i++) {
       skewXTranslateValue[i].value = withDelay(
         i * 25,
         withRepeat(
-          withTiming(30, { duration: 1100 }, () => {
+          withTiming(25, { duration: 900 }, () => {
             skewXTranslateValue[i].value = withTiming(0, { duration: 500 });
           }),
           -1,
@@ -48,29 +62,41 @@ const driveAnimation = ({ Colors }) => {
         )
       );
     }
+
     viewMotionValue.value = withDelay(
-      300,
+      400,
       withRepeat(
-        withTiming(260, { duration: 950 }, () => {
-          viewMotionValue.value = 15;
+        withTiming(260, { duration: 750 }, () => {
+          viewMotionValue.value = 20;
         }),
         -1,
         true
       )
     );
   };
+
+  const pressableAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      shadowOpacity:
+        pressableTranslateValue.value != 0 ? withTiming(0.5) : withTiming(0.2),
+      transform: [
+        {
+          translateY: pressableTranslateValue.value,
+        },
+      ],
+    };
+  });
+
   const motionStyle = useAnimatedStyle(() => {
     return {
       left: viewMotionValue.value,
-      opacity: viewMotionValue.value != 15 ? 1 : 0,
+      opacity: viewMotionValue.value != 20 ? 1 : 0,
     };
   });
+
   const textTranslateStyle = Text_Drive.map((t, i) =>
     useAnimatedStyle(() => {
       return {
-        fontSize: width / 13,
-        color: Colors.white,
-        fontWeight: "500",
         transform: [
           {
             translateX: xAxisTranslateValue[i].value,
@@ -87,22 +113,26 @@ const driveAnimation = ({ Colors }) => {
   );
 
   return (
-    <Pressable
+    <AnimatedButton
       onPress={Action}
-      style={[styles.pressable, { backgroundColor: Colors.white }]}
+      style={[
+        styles.pressable,
+        pressableAnimatedStyle,
+        { backgroundColor: Colors.white, shadowColor: Colors.white },
+      ]}
     >
       <Animated.View style={styles.SmokeCont}>
         {Text_Drive.map((text, i) => (
           <Animated.Text
             key={i}
-            style={[textTranslateStyle[i], { color: Colors.sky, margin: 0.5 }]}
+            style={[styles.text, textTranslateStyle[i], { color: Colors.sky }]}
           >
             {text}
           </Animated.Text>
         ))}
+        <Animated.View style={[styles.fakeView, motionStyle]} />
       </Animated.View>
-      <Animated.View style={[styles.fakeView, motionStyle]} />
-    </Pressable>
+    </AnimatedButton>
   );
 };
 
@@ -110,16 +140,24 @@ export default driveAnimation;
 
 const styles = StyleSheet.create({
   pressable: {
-    width: width / 1.9,
+    width: width / 2.1,
     height: height / 12,
-    alignItems: "center",
-    justifyContent: "center",
     borderRadius: 50,
-    marginVertical: 10,
-    overflow: "hidden",
+    shadowOffset: {
+      width: 8,
+      height: 8,
+    },
+    shadowRadius: 5,
+    elevation: 20,
   },
   SmokeCont: {
     flexDirection: "row",
+    width: width / 2.1,
+    height: height / 12,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 500,
+    overflow: "hidden",
   },
   fakeView: {
     backgroundColor: "white",
@@ -128,5 +166,11 @@ const styles = StyleSheet.create({
     height: height / 23,
     position: "absolute",
     left: 0,
+  },
+  text: {
+    zIndex: -1,
+    fontSize: width / 13,
+    fontWeight: "500",
+    margin: 0.5,
   },
 });
