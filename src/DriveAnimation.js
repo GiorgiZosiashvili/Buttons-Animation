@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   },
   text: {
     zIndex: -1,
-    fontSize: width / 18,
+    fontSize: width / 20,
     fontWeight: "500",
     margin: 0.5,
   },
